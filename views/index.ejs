@@ -1,0 +1,107 @@
+<%- include("partials/header.ejs") %>
+
+<body>
+    <header class="site-header">
+        <div class="header-bar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-10 col-lg-4">
+                        <h1 class="site-branding flex">
+                            <a href="/home">EVENTIFY</a>
+                        </h1>
+                    </div>
+
+                    <div class="col-2 col-lg-8">
+                        <nav class="site-navigation">
+                            <div class="hamburger-menu d-lg-none">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div><!-- .hamburger-menu -->
+
+                            <ul>
+                                <li><a href="/home">HOME</a></li>
+                                <li><a href="/upcoming">UPCOMING EVENTS</a></li>
+                                <% if(user.user_type === 'organisation') {%>
+                                    <li><a href="/create-event">CREATE AN EVENT</a></li>
+                                    <li><a href="/orgDashboard">DASHBOARD</a></li>
+                                <% } else if(user.user_type === 'student') {%>
+                                    <li><a href="/studentDash">DASHBOARD</a></li>
+                                <% }%>
+                                <li><a href="/aboutus">ABOUT</a></li>
+                                <li><a href="/logout">LOGOUT</a></li>
+                                <!-- <li><a href="#"><i class="fas fa-search"></i></a></li> -->
+                            </ul><!-- flex -->
+                        </nav><!-- .site-navigation -->
+                    </div><!-- .col-12 -->
+                </div><!-- .row -->
+            </div><!-- container-fluid -->
+        </div><!-- header-bar -->
+    </header><!-- .site-header -->
+
+    <div class="hero-content" style="height: 720px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 offset-lg-2 col-lg-10">
+
+                    <div class="countdown flex flex-wrap justify-content-between" data-date="2018/06/06">
+                        <div class="countdown-holder">
+                            
+                        </div><!-- .countdown-holder -->
+
+                        
+                    </div><!-- .countdown -->
+                </div><!-- .col-12 -->
+            </div><!-- row -->
+
+            <div class="row">
+                <div class="col-12 ">
+                    <div class="entry-footer">
+                        <a ></a>
+                        <a ></a>
+                    </div>
+                </div>
+            </div>
+        </div><!-- .container -->
+    </div><!-- .hero-content -->
+        
+        <div class="main-content">
+            <div class="container">
+                <div class="col-12 buttons-wrap">
+                    <a href="/upcoming" class="btn gradient flex justify-content-center align-items-center" style="font-size: xx-large;">Upcoming Events</a>
+                </div>
+            </div><!-- container -->
+
+            <div class="next-event-slider-wrap">
+                <div class="swiper-container next-event-slider">
+                    <div class="swiper-wrapper">
+
+                        <% events.forEach( (event) => { %>
+                        <div class="swiper-slide">
+                            <div class="next-event-content">
+                                <figure class="featured-image">
+                                    <img src=<%= event.img_url %> alt="">
+
+                                    <a href=<%= `/see-event?id=${event.id}` %> class="entry-content flex flex-column justify-content-center align-items-center">
+                                        <h3><%= event.name %></h3>
+                                        <p><%= event.description %></p>
+                                    </a>
+                                </figure><!-- featured-image -->
+                            </div><!-- next-event-content -->
+                        </div><!-- swiper-slide" -->
+                        <% }); %>
+                    </div><!-- .swiper-wrapper -->
+                </div><!-- .swiper-container -->
+
+                <div class="swiper-button-next">
+                    <img src="images/button.png" alt="">
+                </div><!-- .slider-button -->
+            </div><!-- .next-event-slider-wrap -->
+        </div><!-- homepage-next-events -->
+
+    </div>
+
+<%- include("partials/footer.ejs") %>

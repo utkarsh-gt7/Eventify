@@ -1,0 +1,211 @@
+<%- include("partials/header.ejs") %>
+
+<body class="about-us">
+    <header class="site-header">
+        <div class="header-bar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-10 col-lg-3">
+                        <h1 class="site-branding flex">
+                            <a href="/home">EVENTIFY</a>
+                        </h1>
+                    </div>
+
+                    <div class="col-2 col-lg-9">
+                        <nav class="site-navigation">
+                            <div class="hamburger-menu d-lg-none">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div><!-- .hamburger-menu -->
+
+                            <ul>
+                                <li><a href="/home">HOME</a></li>
+                                <li><a href="/upcoming">UPCOMING EVENTS</a></li>
+                                <% if(user.user_type === 'organisation') {%>
+                                    <li><a href="/create-event">CREATE AN EVENT</a></li>
+                                    <li><a href="/orgDashboard">DASHBOARD</a></li>
+                                <% } else if(user.user_type === 'student') {%>
+                                    <li><a href="/studentDash">DASHBOARD</a></li>
+                                <% }%>
+                                <li><a href="/aboutus">ABOUT</a></li>
+                                <li><a href="/logout">LOGOUT</a></li>
+                                <!-- <li><a href="#"><i class="fas fa-search"></i></a></li> -->
+                            </ul><!-- flex -->
+                        </nav><!-- .site-navigation -->
+                    </div><!-- .col-12 -->
+                </div><!-- .row -->
+            </div><!-- container-fluid -->
+        </div><!-- header-bar -->
+    </header><!-- .site-header -->
+
+    <div class="page-header" >
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="entry-header">
+                        <h2 class="entry-title"><%= about.name %></h2>
+
+                        <ul class="breadcrumbs flex align-items-center">
+                            <li>Dashboard</li>
+                        </ul><!-- .breadcrumbs -->
+                    </div><!-- .entry-header -->
+                </div><!-- .col-12 -->
+            </div><!-- .row -->
+        </div><!-- .container -->
+    </div><!-- .page-header -->
+
+    <div class="main-content">
+        <div class="container">
+            <div class="milestones">
+                <div class="row flex flex-wrap justify-content-center">
+    
+                    <div class="d-col-n mt-5 mt-lg-0">
+                        <div class="counter-box">
+                                <div class="flex justify-content-center">
+                                    <div class="start-counter" data-to=<%= `${reg}` %> data-speed="2000"></div>
+                                </div>
+        
+                                <h3 class="entry-title">Registrations</h3><!-- entry-title -->
+                            </div><!-- counter-box -->
+                    </div><!-- d-col-n -->
+    
+                    <div class="d-col-n mt-5 mt-lg-0">
+                        <div class="counter-box">
+                            <div class="flex justify-content-center">
+                                <div class="start-counter" data-to=<%= `${eventsNo}` %> data-speed="2000"></div>
+                            </div>
+    
+                            <h3 class="entry-title">Events</h3><!-- entry-title -->
+                        </div><!-- counter-box -->
+                    </div><!-- d-col-n -->
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="entry-header">
+                <div class="entry-title">
+                    
+                    <h2>Events Data</h2>
+                </div><!-- -->
+            </div><!-- -->
+
+            <div class="d-flex flex-row">
+
+            <% for(i = 0; i < eventArray.length; i++) {%>
+            <div class="row elements-wrap" class="d-flex">
+                <div class="col-12 accordion-and-tabs-wrap">
+
+                    <div class="entry-content">
+                        <div class="row">
+
+                            <div class="0">
+                                <div class="tabs">
+                                    <ul class="tabs-nav flex">
+                                        <li class="tab-nav flex justify-content-center align-items-center active" data-target="#tab_nameEvent">Event</li>
+                                        <li class="tab-nav flex justify-content-center align-items-center" data-target="#tab_dateEvent">Date</li>
+                                        <li class="tab-nav flex justify-content-center align-items-center" data-target="#tab_aboutEvent">About Event</li>
+                                    </ul><!-- tabs-nav -->
+
+                                    <div class="tabs-container">
+                                        <div id="tab_nameEvent" class="tab-content">
+                                            <h2 class="entry-header">Name</h2>
+
+                                            <p><b><%= eventArray[i].event_details.name %></b></p><br>
+                                            <h2 class="entry-header">Categories</h2>
+
+                                            <p><b><%= eventArray[i].event_details.categories %></b></p><br>
+                                        </div>
+
+                                        <div id="tab_dateEvent" class="tab-content">
+                                            <h2 class="entry-header">Start Date</h2>
+                                            <p><b><%= eventArray[i].event_details.start_date %></b></p><br>
+
+                                            <h2 class="entry-header">End Date</h2>
+                                            <p><b><%= eventArray[i].event_details.end_date %></b></p><br>
+
+                                        </div>
+                                        
+                                        <div id="tab_aboutEvent" class="tab-content">
+                                            <h2 class="entry-header">About</h2>
+
+                                            <p><b><%= eventArray[i].event_details.description %></b></p><br>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div><!-- col-7 -->
+                        </div><!-- row -->
+                    </div><!-- entry-content -->
+                </div><!-- col-12 -->
+            </div><!-- row elements-wrap -->
+            <div class="row elements-wrap " class="d-flex mt-6" style="margin-top: 45px; color:#111">
+                
+                <div class="col-12 accordion-and-tabs-wrap">
+
+                    <div class="entry-content">
+                        <div class="row">
+
+                            <div class="0">
+                                <div class="page-content page-container" id="page-content">
+                                    <div class="padding">
+                                        <div class="row container d-flex justify-content-center">
+                                
+                                <div class="col-lg-8 grid-margin stretch-card table2" >
+                                              <div class="card" style="width: 600px;">
+                                                <div class="card-body" style="width: 600px; max-height:360px; overflow-x: scroll; overflow-x: hidden;" >
+                                                  
+                                               
+                                                  <h4 class="card-title">Basic Table</h4>
+                                                  <p class="card-description">
+                                                    Basic table with card
+                                                  </p>
+                                                
+                                                  <div class="table-responsive"> 
+                                                    <table class="table">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Registration Number</th>
+                                                          <th>Name</th>
+                                                          <th>Email</th>
+                                                          <th>Phone</th>
+                                                          <th>Course</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        
+                                                        <% eventArray[i].registered_students.forEach((student) => {%>
+                                                        <tr>
+                                                          <td><%= student.reg_no %></td>
+                                                          <td><%= student.name %></td>
+                                                          <td><%= student.email %></td>
+                                                          <td><%= student.phone %></td>
+                                                          <td><%= student.course %></td>
+                                                        </tr>
+                                                        <% }) %>
+                                                      </tbody>
+                                                    </table>
+                                                  </div>
+                                            
+                                            </div>
+                                              </div>
+                                            </div>
+                                            
+                                            </div>
+                                              </div>
+                                            </div>
+                            </div><!-- col-7 -->
+                        </div><!-- row -->
+                    </div><!-- entry-content -->
+                </div><!-- col-12 -->
+            </div><!-- row elements-wrap -->
+            <% } %>
+
+            </div>
+            <!-- ////// -->
+
+        </div><!-- container -->
+    </div><!-- main-content -->
+
+<%- include("partials/footer.ejs") %>

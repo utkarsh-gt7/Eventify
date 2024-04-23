@@ -1,0 +1,125 @@
+<%- include("partials/header.ejs") %>
+<body class="elements-page">
+    <header class="site-header">
+        <div class="header-bar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-10 col-lg-4">
+                        <h1 class="site-branding flex">
+                            <a href="/home">EVENTIFY</a>
+                        </h1>
+                    </div>
+
+                    <div class="col-2 col-lg-8">
+                        <nav class="site-navigation">
+                            <div class="hamburger-menu d-lg-none">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div><!-- .hamburger-menu -->
+
+                            <ul>
+                                <li><a href="/home">HOME</a></li>
+                                <li><a href="/upcoming">UPCOMING EVENTS</a></li>
+                                <% if(user.user_type === 'organisation') {%>
+                                    <li><a href="/create-event">CREATE AN EVENT</a></li>
+                                    <li><a href="/orgDashboard">DASHBOARD</a></li>
+                                <% } else if(user.user_type === 'student') {%>
+                                    <li><a href="/studentDash">DASHBOARD</a></li>
+                                <% }%>
+                                <li><a href="/aboutus">ABOUT</a></li>
+                                <li><a href="/logout">LOGOUT</a></li>
+                                <!-- <li><a href="#"><i class="fas fa-search"></i></a></li> -->
+                            </ul><!-- flex -->
+                        </nav><!-- .site-navigation -->
+                    </div><!-- .col-12 -->
+                </div><!-- .row -->
+            </div><!-- container-fluid -->
+        </div><!-- header-bar -->
+    </header><!-- .site-header -->
+
+    <div class="page-header" style=<%=`background:url(${event.img_url}) no-repeat; background-size: contain; background-position: center; height: calc(33.33vh - 50px);`%>>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="entry-header">
+                        <h2 class="entry-title"><%= event.name %></h2>
+                    </div><!-- .entry-header -->
+                </div><!-- .col-12 -->
+            </div><!-- .row -->
+        </div><!-- .container -->
+    </div><!-- .page-header -->
+
+    <div class="main-content">
+            <div class="container">
+
+                <div class="row elements-wrap">
+                    <div class="col-12 accordion-and-tabs-wrap">
+
+                        <div class="entry-content">
+                            <div class="row">
+
+                                <div class="col-12 col-lg-7 mt-5 mt-lg-0">
+                                    <div class="tabs">
+                                        <ul class="tabs-nav flex">
+                                            <li class="tab-nav flex justify-content-center align-items-center active" data-target="#tab_details">About the event</li>
+                                            <li class="tab-nav flex justify-content-center align-items-center" data-target="#tab_venue">Venue</li>
+                                            <li class="tab-nav flex justify-content-center align-items-center" data-target="#tab_dates">Dates</li>
+                                            <!-- <li class="tab-nav flex justify-content-center align-items-center" data-target="#tab_organizers">Organizers</li> -->
+                                        </ul><!-- tabs-nav -->
+
+                                        <div class="tabs-container">
+                                            <div id="tab_details" class="tab-content">
+                                                <h2 class="entry-header">Description</h2>
+
+                                                <p><b><%= event.description %></b></p><br>
+                                                <h2 class="entry-header">Categories</h2>
+
+                                                <p><b><%= event.categories %></b></p><br>
+                                            </div>
+
+                                            <div id="tab_venue" class="tab-content">
+                                                <h2 class="entry-header"><%= event.location %></h2>
+
+                                            </div>
+                                            
+                                            <div id="tab_dates" class="tab-content">
+                                                <h2 class="entry-header">Begining Date</h2>
+
+                                                <p><b><%= event.start_date %></b></p><br>
+
+                                                <h2 class="entry-header">Ending Date</h2>
+
+                                                <p><b><%= event.end_date %></b></p>
+                                            </div>
+
+                                            <!-- <div id="tab_organizers" class="tab-content">
+                                                <h2 class="entry-header">10 years a mission</h2>
+
+                                                <p>Curabitur venenatis efficitur lorem sed tempor. Integer aliquet tempor cursus. Nullam vestibulum convallis risus vel condimentum. Nullam auctor lorem in libero luctus, vel volutpat quam tincidunt. Morbi sodales, dolor id ultricies dictum, diam odio tempor purus, at ultrices elit nulla ac nisl. Vestibulum enim sapien, blandit finibus elit vitae, venenatis tempor enim.</p>
+                                            </div> -->
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <% if(locals.registered === true) {%>
+                                        <div class="col-12 submit flex justify-content-center">
+                                            <input type="submit" name="" value="Registered!" class="btn border-blu flex justify-content-center align-items-center">
+                                        </div>
+                                    <% } else { %>
+                                    <form action=<%= `/register-event?id=${event.id}` %> method="post">
+                                    <div class="col-12 submit flex justify-content-center">
+                                        <input type="submit" name="" value="Register" class="btn gradient flex justify-content-center align-items-center" readonly>
+                                    </div>
+                                    </form>
+                                    <% } %>
+                                </div><!-- col-7 -->
+                            </div><!-- row -->
+                        </div><!-- entry-content -->
+                    </div><!-- col-12 -->
+                </div><!-- row elements-wrap -->
+            </div><!-- container -->
+    </div><!-- main-content -->
+
+<%- include("partials/footer.ejs") %>

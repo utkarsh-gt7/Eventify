@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="styles/signIn.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Register</title>
+</head>
+<body>
+    <div class="form-bg" style="margin-top: 100px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-container">
+                        <h3 class="title">Register</h3>
+                        <form class="form-horizontal" action="/registerORG" method="post">
+                            <div class="form-group">
+                                <label>Organisation's Name</label>
+                                <input type="text" name="name" class="form-control" placeholder="Organisation Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email ID</label>
+                                <input type="email" name="email" class="form-control" placeholder="Email Address">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" name="password" class="form-control" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <input type="password" name="password1" class="form-control" placeholder="Confirm Password">
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Select categories</label>
+                                <select id="category" class="form-control" name="category">
+                                    <option value="Coding">Coding</option>
+                                    <option value="Anime">Anime</option>
+                                    <option value="Music">Music</option>
+                                    <!-- Add more options as needed -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="keywords">Selected categories</label>
+                                <input class="form-control" type="text" id="keywords" name="keywords" readonly>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn" type="button" onclick="addCategory()">Add Category</button>
+                            </div>
+                            <h4 class="sub-title">Additional Information</h4>
+                            <div class="form-group">
+                                <label>Year established</label>
+                                <input type="text" name="year" class="form-control" placeholder="Enter year of establishment">
+                            </div>
+                            <div class="form-group">
+                                <label>Logo URL</label>
+                                <input type="text" name="logo" class="form-control" placeholder="Logo URL">
+                            </div>
+                            <div class="form-group">
+                                <label>About</label>
+                                <input type="text" name="about" class="form-control" placeholder="About">
+                            </div>
+                            <span class="signin-link">Already have an account? Click here to <a href="/">Login</a></span>
+                            <button class="btn signup">Register</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <!-- Your image goes here -->
+                    <img src="images/logo.jpg" style="height: 250px; margin-left: 100px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function addCategory() {
+            var categorySelect = document.getElementById('category');
+            var selectedCategory = categorySelect.options[categorySelect.selectedIndex].value;
+            var keywordsInput = document.getElementById('keywords');
+            var currentKeywords = keywordsInput.value;
+            if (currentKeywords.length > 0) {
+                keywordsInput.value = currentKeywords + ', ' + selectedCategory;
+            } else {
+                keywordsInput.value = selectedCategory;
+            }
+        }
+    </script>
+</body>
+</html>

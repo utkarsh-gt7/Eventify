@@ -1,0 +1,88 @@
+<%- include("partials/header.ejs") %>
+
+<body class="blog-page">
+    <header class="site-header">
+        <div class="header-bar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-10 col-lg-4">
+                        <h1 class="site-branding flex">
+                            <a href="/home">EVENTIFY</a>
+                        </h1>
+                    </div>
+
+                    <div class="col-2 col-lg-8">
+                        <nav class="site-navigation">
+                            <div class="hamburger-menu d-lg-none">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div><!-- .hamburger-menu -->
+
+                            <ul>
+                                <li><a href="/home">HOME</a></li>
+                                <li><a href="/upcoming">UPCOMING EVENTS</a></li>
+                                <% if(user.user_type === 'organisation') {%>
+                                    <li><a href="/create-event">CREATE AN EVENT</a></li>
+                                    <li><a href="/orgDashboard">DASHBOARD</a></li>
+                                <% } else if(user.user_type === 'student') {%>
+                                    <li><a href="/studentDash">DASHBOARD</a></li>
+                                <% }%>
+                                <li><a href="/aboutus">ABOUT</a></li>
+                                <li><a href="/logout">LOGOUT</a></li>
+                                <!-- <li><a href="#"><i class="fas fa-search"></i></a></li> -->
+                            </ul><!-- flex -->
+                        </nav><!-- .site-navigation -->
+                    </div><!-- .col-12 -->
+                </div><!-- .row -->
+            </div><!-- container-fluid -->
+        </div><!-- header-bar -->
+    </header><!-- .site-header -->
+
+    <div class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="entry-header">
+                        <h2 class="entry-title">Upcoming Events</h2>
+                    </div><!-- entry-header -->
+                </div><!-- col-12 -->
+            </div><!-- row -->
+        </div><!-- container -->
+    </div><!-- page-header -->
+
+    <div class="main-content">
+        <div class="container">
+            <div class="last-news">
+
+                <div class="row blog-list-page">
+                    <% for(let i = 0; i < events.length ; i++) { %>
+                    <div class="col-12 col-md-6 single-blog-content">
+                        <div class="blog-content">
+                            <figure class="featured-image">
+                                <a href=<%= `/see-event?id=${events[i].id}` %> > <img src=<%= events[i].img_url %> alt="fesival+celebration"> </a>
+                            </figure><!-- featured-image -->
+
+                            <div class="box-link-date">
+                                <%= events[i].start_date %>
+                            </div><!-- box-link-date -->
+
+                            <div class="entry-content">
+                                <div class="entry-header">
+                                    <a href=<%= `/see-event?id=${events[i].id}` %> ><h2><%= events[i].name %></h2></a>
+                                </div><!-- entry-header -->
+
+                                <div class="entry-description">
+                                    <p><%= events[i].description %></p>
+                                </div><!-- entry-description -->
+                            </div><!-- entry-content -->
+                        </div>
+                    </div><!-- col-6 -->
+                    <% } %>
+                </div><!-- blog-list-page -->
+            </div><!-- last-news -->
+        </div><!-- container -->
+    </div><!-- main-content -->
+
+<%- include("partials/footer.ejs") %>
