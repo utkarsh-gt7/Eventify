@@ -28,7 +28,7 @@ function initializeStudent(passport){
             }
         )
     }
-    passport.use(
+    passport.use("student",
         new LocalStrategy(
             {
                 usernameField: "email",
