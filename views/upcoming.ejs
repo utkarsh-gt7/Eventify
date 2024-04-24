@@ -30,6 +30,7 @@
                                     <li><a href="/studentDash">DASHBOARD</a></li>
                                 <% }%>
                                 <li><a href="/aboutus">ABOUT</a></li>
+                                <li><a href="/contact">CONTACT</a></li>
                                 <li><a href="/logout">LOGOUT</a></li>
                                 <!-- <li><a href="#"><i class="fas fa-search"></i></a></li> -->
                             </ul><!-- flex -->
@@ -55,6 +56,10 @@
     <div class="main-content">
         <div class="container">
             <div class="last-news">
+                <form class="form-inline" action="/search" method="POST">
+                    <input class="form-control mr-2" type="search" name="search"
+                    placeholder="Search" aria-label="Search"><button class="btn btn-info" type="submit"><i class="fas fa-search"></i></button>
+                </form>
 
                 <div class="row blog-list-page">
                     <% for(let i = 0; i < events.length ; i++) { %>

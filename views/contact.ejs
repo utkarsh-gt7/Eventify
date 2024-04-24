@@ -30,6 +30,7 @@
                                     <li><a href="/studentDash">DASHBOARD</a></li>
                                 <% }%>
                                 <li><a href="/aboutus">ABOUT</a></li>
+                                <li><a href="/contact">CONTACT</a></li>
                                 <li><a href="/logout">LOGOUT</a></li>
                                 <!-- <li><a href="#"><i class="fas fa-search"></i></a></li> -->
                             </ul><!-- flex -->
@@ -45,11 +46,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="entry-header">
-                        <h2 class="entry-title">Elements</h2>
+                        <h2 class="entry-title">Feedback</h2>
 
                         <ul class="breadcrumbs flex align-items-center">
-                            <li><a href="#">Home</a></li>
-                            <li>Contact</li>
+                            <li>is appreciated</li>
                         </ul><!-- .breadcrumbs -->
                     </div><!-- entry-header -->
                 </div><!-- col-12 -->
@@ -59,11 +59,9 @@
 
     <div class="container">
         <div class="main-content">
-            <div class="contact-page-map">
-                <iframe id="gmap_canvas" src="https://maps.google.com/maps?q=university of san francisco&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
-            </div><!-- map -->
 
             <div class="contact-details">
+                <br>
                 <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-4">
@@ -77,7 +75,7 @@
                                         Phone
                                     </div><!-- entry-title -->
                                     <div class="entry-content">
-                                        +45 677 8993000 223
+                                        +91 8146 324 919
                                     </div><!-- entry-content -->
                                 </div><!-- phone-number -->
                             </div><!-- contact-phone -->
@@ -94,7 +92,7 @@
                                         E-mail
                                     </div><!-- entry-title -->
                                     <div class="entry-content">
-                                        office@template.com
+                                        singhwebworks@gmail.com
                                     </div><!-- entry-content -->
                                 </div><!-- phone-number -->
                             </div><!-- contact-phone -->
@@ -111,8 +109,8 @@
                                         Address
                                     </div><!-- entry-title -->
                                     <div class="entry-content">
-                                        Main Str. no 45-46, b3, 56832,<br>
-                                        Los Angeles, CA
+                                        Lovely Professional University,<br>
+                                        Jalandhar, Punjab, India
                                     </div><!-- entry-content -->
                                 </div><!-- phone-number -->
                             </div><!-- contact-phone -->
@@ -124,41 +122,38 @@
             <div class="get-in-touch">
                 <div class="entry-header">
                     <div class="entry-title">
-                        <p>JUST THE BEST</p>
                         <h2>Get in touch</h2>
                     </div><!-- entry-title -->
                 </div><!-- entry-header -->
 
                 <div class="entry-content">
-                    <p>Quisque at erat eu libero consequat tempus. Quisque mole stie convallis tempus.
-                        Ut semper purus metus, a euismod sapien sodales ac. Duis viverra eleifend fermentum.
-                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tempus vestibulum mauris quis aliquam.
-                        Integer accumsan sodales odio, id tempus velit ullamcorper id.</p>
+                    <p>We value your feedback! Your input is essential in helping us enhance this platform for seamless event management, benefiting both organizations and students. By sharing your thoughts, you contribute to creating a comprehensive environment tailored to meet the diverse needs of our users. Together, we strive to cultivate an inclusive and user-friendly space where events flourish and connections thrive. Thank you for being an integral part of our journey towards excellence.</p>
                 </div><!-- entry-content -->
 
                 <div class="contact-form">
+                    <form action="/contact-me" method="POST">
                     <div class="row">
                         <div class="col-12 col-md-6">
-                            <input type="text" placeholder="Your name">
+                            <input type="text" name="name" placeholder="Your name">
                         </div><!-- col-4 -->
 
                         <div class="col-12 col-md-6">
-                            <input type="email" placeholder="Your email">
+                            <input type="email" name="email" placeholder="Your email">
                         </div><!-- col-6 -->
 
                         <div class="col-12">
-                            <input type="text" placeholder="Subject">
+                            <input type="text" name="subject" placeholder="Subject">
                         </div>
 
                         <div class="col-12">
-                            <textarea name="name" rows="8" cols="80" placeholder="message"></textarea>
+                            <textarea name="name" name="message" rows="8" cols="80" placeholder="message"></textarea>
                         </div>
 
                         <div class="col-12 submit flex justify-content-center">
-                            <input type="submit" name="" value="send message" class="btn">
+                            <input type="submit"  value=<%= locals.message ? message : "Send Message"%> class="btn">
                         </div>
-
                     </div><!-- row -->
+                </form>
                 </div><!-- contact-form -->
             </div><!-- newsletter-subscribe -->
         </div><!-- main-content -->

@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="entry-header">
-                        <h2 class="entry-title">My Upcoming Events</h2>
+                        <h2 class="entry-title">Upcoming Events</h2>
                     </div><!-- entry-header -->
                 </div><!-- col-12 -->
             </div><!-- row -->
@@ -58,29 +58,28 @@
             <div class="last-news">
 
                 <div class="row blog-list-page">
-                    <% for(let i = 0; i < event.length ; i++) { %>
-                        <div class="col-12 col-md-6 single-blog-content">
-                            <div class="blog-content">
-                                <figure class="featured-image">
-                                    <a href="/see-event?id=<%= event[i].event_details.id %>">
-                                        <img src="<%= event[i].event_details.img_url %>" alt="festival+celebration">
-                                    </a>
-                                </figure><!-- featured-image -->
-                                <div class="box-link-date">
-                                    <%= event[i].event_details.start_date %>
-                                </div><!-- box-link-date -->
-                                <div class="entry-content">
-                                    <div class="entry-header">
-                                        <a href="/see-event?id=<%= event[i].event_details.id %>">
-                                            <h2><%= event[i].event_details.name %></h2>
-                                        </a>
-                                    </div><!-- entry-header -->
-                                    <div class="entry-description">
-                                        <p><%= event[i].event_details.description %></p>
-                                    </div><!-- entry-description -->
-                                </div><!-- entry-content -->
-                            </div><!-- blog-content -->
-                        </div><!-- single-blog-content -->
+                    <% for(let i = 0; i < events.length ; i++) { %>
+                    <div class="col-12 col-md-6 single-blog-content">
+                        <div class="blog-content">
+                            <figure class="featured-image">
+                                <a href=<%= `/see-event?id=${events[i].id}` %> > <img src=<%= events[i].img_url %> alt="fesival+celebration"> </a>
+                            </figure><!-- featured-image -->
+
+                            <div class="box-link-date">
+                                <%= events[i].start_date %>
+                            </div><!-- box-link-date -->
+
+                            <div class="entry-content">
+                                <div class="entry-header">
+                                    <a href=<%= `/see-event?id=${events[i].id}` %> ><h2><%= events[i].name %></h2></a>
+                                </div><!-- entry-header -->
+
+                                <div class="entry-description">
+                                    <p><%= events[i].description %></p>
+                                </div><!-- entry-description -->
+                            </div><!-- entry-content -->
+                        </div>
+                    </div><!-- col-6 -->
                     <% } %>
                 </div><!-- blog-list-page -->
             </div><!-- last-news -->
