@@ -439,7 +439,7 @@ app.post("/create-event", checkNotAuthenticated, isOrganisation, (req, res) => {
             
         }
     )
-    res.render("create-event.ejs");
+    res.render("create-event.ejs", {user: req.user});
 })
 
 app.post("/register-event", checkNotAuthenticated, async (req, res) => {
@@ -448,7 +448,7 @@ app.post("/register-event", checkNotAuthenticated, async (req, res) => {
     let result = await db.query("INSERT INTO registration (org_id, event_id, student_id) VALUES ($1, $2, $3)", [org_id.rows[0].org_id, event_id, req.user.id]);
     
     let post = await db.query('SELECT * FROM event WHERE id = $1', [req.query.id]);
-    res.render("see-event.ejs", {event : post.rows[0], registered: true});
+    res.render("see-event.ejs", {event : post.rows[0], registered: true, user: req.user});
 })
 
 app.get("/logout", checkNotAuthenticated,  (req, res) => {
