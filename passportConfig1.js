@@ -28,7 +28,7 @@ function initializeORG(passport){
             }
         )
     }
-    passport.use(
+    passport.use("organisation",
         new LocalStrategy(
             {
                 usernameField: "email",
