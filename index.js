@@ -29,8 +29,59 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+//Email functionality.
+const my_email = process.env.MY_EMAIL;
+const my_pass = process.env.MY_PASS;
 
-app.use('/login', (req, res, next) => {
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: my_email,
+        pass: my_pass
+    }
+});
+
+function sendMail(name, Semail, subject, message) {
+    return new Promise((resolve, reject) => {
+      const mailOptions = {
+        from: Semail,
+        to: my_email,
+        subject: subject + ' Message from ' + name,
+        text: message + ' from ' + Semail
+      };
+  
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+          reject(false);
+        } else {
+          console.log('Email sent: ' + info.response);
+          resolve(true);
+        }
+      });
+    });
+}
+
+app.post("/contact-me", checkNotAuthenticated, async (req, res) => {
+    const name = req.body.name;
+    const Semail = req.body.email;
+    const subject = req.body.subject;
+    const message = req.body.message;
+
+    try {
+        // Send email and get the result
+        const emailSent = await sendMail(name, Semail, subject, message);
+    
+        // Respond to the client based on the result
+        res.render("contact.ejs", {message: "Sent!", user: req.user});
+      } catch (error) {
+        // Handle any unexpected errors
+        console.error(error);
+        res.render("contact.ejs", {message: "Try_Again!", user: req.user});
+      }  
+});
+
+app.use('/login', checkAuthenticated, (req, res, next) => {
     // Assuming user_type is sent in the request body
     if (req.body.user_type === 'organisation') {
         initializeORG(passport);
@@ -40,11 +91,55 @@ app.use('/login', (req, res, next) => {
     next();
 });
 
-app.get("/", (req, res) => {
+app.post("/login", (req, res, next) => {
+    if (req.body.user_type === 'organisation') {
+        initializeORG(passport);
+        passport.authenticate("organisation", (err, user, info) => {
+            console.log("INside ORG");
+            if (err) {
+                return next(err);
+            }
+            if (!user) {
+                return res.redirect('/');
+            }
+            // Assuming user_type is sent in the request body
+            
+            req.logIn(user, (err) => {
+                if (err) {
+                    return next(err);
+                }
+                return res.redirect('/home');
+            });
+        })(req, res, next);
+    } else if (req.body.user_type === 'student') {
+        initializeStudent(passport);
+        console.log("Inside stu");
+        passport.authenticate("student", (err, user, info) => {
+            if (err) {
+                return next(err);
+            }
+            if (!user) {
+                return res.redirect('/');
+            }
+            // Assuming user_type is sent in the request body
+            
+            req.logIn(user, (err) => {
+                if (err) {
+                    return next(err);
+                }
+                return res.redirect('/home');
+            });
+        })(req, res, next);
+    }
+    
+});
+
+
+app.get("/", checkAuthenticated, (req, res) => {
     res.render("login.ejs");
 })
 
-app.get("/home", async (req, res) => {
+app.get("/home", checkNotAuthenticated, async (req, res) => {
     const result = await db.query('SELECT * FROM event');
     res.render("index.ejs", {events: result.rows, user: req.user});
 })
@@ -57,17 +152,29 @@ app.get("/home", async (req, res) => {
 //     res.render("elements.ejs");
 // })
 
-// app.get("/contact", (req, res) => {
-//     res.render("contact.ejs");
-// })
+app.get("/contact", checkNotAuthenticated, (req, res) => {
+    res.render("contact.ejs", {user: req.user});
+})
 
-app.get("/upcoming", async (req, res) => {
+app.get("/upcoming", checkNotAuthenticated, async (req, res) => {
     let results = await db.query('SELECT * FROM event');
     let  events = results.rows;
     res.render("upcoming.ejs", {events: events, user: req.user});
 })
 
-app.get("/aboutus", (req, res) => {
+app.post("/search", checkNotAuthenticated, async (req, res) => {
+    let results = await db.query(`
+    SELECT *
+    FROM event
+    WHERE lower(name) LIKE '%' || lower($1) || '%'
+    OR lower($1) IN (
+    SELECT lower(unnest(categories)))
+  `, [req.body.search]);
+    console.log(results.rows[0]);
+    res.render("upcoming.ejs", {events: results.rows, user: req.user});
+})
+
+app.get("/aboutus", checkNotAuthenticated, (req, res) => {
     res.render("about-us.ejs", {user: req.user});
 })
 
@@ -75,25 +182,21 @@ app.get("/registerORG", (req, res) => {
     res.render("registerORG.ejs");
 })
 
-app.get("/loginORG", (req, res) => {
-    res.render("loginORG.ejs");
-})
-
 app.get("/registerStudent", (req, res) => {
     res.render("signIn.ejs");
 })
 
-app.get("/create-event", (req, res) => {
+app.get("/create-event", checkNotAuthenticated, isOrganisation, (req, res) => {
     res.render("create-event.ejs", {user: req.user})
 })
 
-app.get("/see-event", async (req, res) => {
+app.get("/see-event", checkNotAuthenticated, async (req, res) => {
     let result = await db.query('SELECT * FROM event WHERE id = $1', [req.query.id]);
     console.log(result.rows[0]);
     res.render("see-event.ejs", {event : result.rows[0], user: req.user});
 })
 
-app.get("/orgDashboard", async (req, res) => {
+app.get("/orgDashboard", checkNotAuthenticated, isOrganisation, async (req, res) => {
     let aboutORG = await db.query('SELECT * FROM organisation WHERE id = $1', [req.user.id]);
     let reg = await db.query('SELECT * FROM event WHERE org_id = $1', [req.user.id]);
     let events = await db.query('SELECT * FROM event WHERE org_id = $1', [req.user.id]);
@@ -120,7 +223,7 @@ app.get("/orgDashboard", async (req, res) => {
     res.render("orgDash.ejs", {about: aboutORG.rows[0], reg: reg.rows.length, eventsNo: events.rows.length, events: events.rows, eventArray: eventArray, user: req.user});
 })
 
-app.get("/studentDash", async (req, res) => {
+app.get("/studentDash", checkNotAuthenticated, isStudent, async (req, res) => {
     try {
         const registeredEvents = await db.query(`
         SELECT DISTINCT event.id, event.name, event.categories, event.start_date, event.end_date, event.location, event.description, event.img_url
@@ -306,7 +409,7 @@ app.post("/registerORG", async (req, res) => {
                           }
                           console.log(results.rows);
                           req.flash('success_msg','You are now registered and can log in');
-                          res.redirect("/loginORG");
+                          res.redirect("/");
                       }
                   )
               }
@@ -315,7 +418,7 @@ app.post("/registerORG", async (req, res) => {
     }
 })
 
-app.post("/create-event", (req, res) => {
+app.post("/create-event", checkNotAuthenticated, isOrganisation, (req, res) => {
     const name = req.body.name;
     const begin = req.body.begin;
     const end = req.body.end;
@@ -339,7 +442,7 @@ app.post("/create-event", (req, res) => {
     res.render("create-event.ejs");
 })
 
-app.post("/register-event", async (req, res) => {
+app.post("/register-event", checkNotAuthenticated, async (req, res) => {
     const event_id = req.query.id;
     const org_id = await db.query("SELECT * FROM event WHERE id = $1", [event_id]);
     let result = await db.query("INSERT INTO registration (org_id, event_id, student_id) VALUES ($1, $2, $3)", [org_id.rows[0].org_id, event_id, req.user.id]);
@@ -348,20 +451,23 @@ app.post("/register-event", async (req, res) => {
     res.render("see-event.ejs", {event : post.rows[0], registered: true});
 })
 
-app.get("/logout", (req, res) => {
+app.get("/logout", checkNotAuthenticated,  (req, res) => {
     req.logOut((err) => {
         if(err){
             console.error(err);
-            res.redirect("/");
+            res.redirect("/home");
         }
     });
-    req.flash('success_msg', 'You have logged out');
-    res.redirect("/");
+    passport.initialize()(req, res, () => {
+        // Redirect to the homepage
+        res.redirect("/");
+    });
+    
 })
 
 function checkAuthenticated(req, res, next){
   if(req.isAuthenticated()){
-      return res.redirect("/");
+      return res.redirect("/home");
   }
   next();
 }
@@ -370,14 +476,22 @@ function checkNotAuthenticated(req, res, next){
   if(req.isAuthenticated()){
       return next();
   }
-  res.redirect("/login");
+  res.redirect("/");
 }
 
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.role === 'admin') {
+function isStudent(req, res, next) {
+    if (req.isAuthenticated() && req.user.user_type === 'student') {
       return next();
     }
-    res.redirect('/');
+    res.redirect('/home');
+}
+
+function isOrganisation(req, res, next) {
+    if (req.isAuthenticated() && req.user.user_type === 'organisation') {
+        console.log("True for organisation");
+        return next();
+    }
+    res.redirect('/home');
 }
 
 app.listen(PORT, ()=>{
