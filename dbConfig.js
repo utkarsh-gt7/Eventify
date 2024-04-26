@@ -14,6 +14,7 @@ const db = new pg.Client({
 
 db.connect();
 
+db.query("DROP TABLE event");
 
 const createStudentTableQuery = `
     CREATE TABLE IF NOT EXISTS student (
